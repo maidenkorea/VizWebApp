@@ -1,27 +1,31 @@
 from ultralytics import YOLO
 import cv2
 
-def segmentation():
-    # capture device
-    cap = cv2.VideoCapture(0)
-    cap.set(3, 640)
-    cap.set(4, 480)
+class Segmentation:
+    def __init__(self):
+        self.isActive = True
 
-    # model and classes
-    model = YOLO("yolov8m-seg.pt")
-    yolo_classes = list(model.names.values())
-    classes_ids = [yolo_classes.index(clas) for clas in yolo_classes]
+        self.model = YOLO("yolov8m-seg.pt")
+        self.yolo_classes = list(self.model.names.values())
+        self.classes_ids = [self.yolo_classes.index(clas) for clas in self.yolo_classes]
 
 
-    while True:
-        success, img = cap.read()
-        results = model(source=0, show=True, conf=.3)
-        print(results)
+    def segmentation(self):
+        self.cap = cv2.VideoCapture(0)
+        self.cap.set(3, 640)
+        self.cap.set(4, 480)
 
-        cv2.imshow('Webcam', img)
-        if cv2.waitKey(0) == ord('q'):
-            break
+        self.isActive = True
+        while True:
+            _, frame = self.cap.read()
+            _, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            if not self.isActive:
+                break
 
-    cap.release()
-    cv2.destroyAllWindows()
 
+    def end(self):
+        self.cap.release()
+        self.isActive = False
