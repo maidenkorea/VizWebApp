@@ -8,7 +8,7 @@ def segmentation():
     cap.set(4, 480)
 
     # model and classes
-    model = YOLO("PUT MODEL HERE")
+    model = YOLO("yolov8m-seg.pt")
     yolo_classes = list(model.names.values())
     classes_ids = [yolo_classes.index(clas) for clas in yolo_classes]
 

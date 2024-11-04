@@ -6,11 +6,15 @@
     <title>Home</title>
 </head>
 <body>
-<div>
-    <h1>Viz Web Portal</h1>
-    <button>Start</button>
-    <button>Stop</button>
-    <p>For development purposes.</p>
-</div>
+    <div>
+        <h1>Viz Web Portal</h1>
+        <form action="/feed" method="post" target="_self">
+            <input type="submit" value="Start">
+        </form>
+        <form action="/stop" method="post" target="_self" value="Stop">
+            <input type="submit" value="Stop">
+        </form>
+        <p>For development purposes.</p>
+    </div>
 </body>
 </html>
