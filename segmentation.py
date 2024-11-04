@@ -3,7 +3,7 @@ import cv2
 
 class Segmentation:
     def __init__(self):
-        self.isActive = True
+        self.isActive = False
 
         self.model = YOLO("yolov8m-seg.pt")
         self.yolo_classes = list(self.model.names.values())
