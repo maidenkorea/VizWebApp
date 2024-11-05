@@ -23,8 +23,9 @@ cd C:\Your\Project\Directory\Path
 ``` 
 and then entering:
 ```
-shell git clone https://github.com/maidenkorea/VizWebApp.git
+git clone https://github.com/maidenkorea/VizWebApp.git
 ```
+If you do not have git installed, go ahead and follow [this](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) guide.
 #### 3. Create a Python virtual environment
 Ensure you are still in the project directory, and enter:
 ```
