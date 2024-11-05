@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, Response, redirect, url_for
 from segmentation import Segmentation
 
 pages = Blueprint(__name__, 'views')
-do = Segmentation()
+do = Segmentation('yolov8m-seg.pt')
 
 @pages.route('/')
 def home():
