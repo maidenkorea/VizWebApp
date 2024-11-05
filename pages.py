@@ -17,6 +17,6 @@ def stop():
     do.end()
     return redirect(url_for('pages.home'))
 
-@pages.route('videostream', methods=["POST"])
+@pages.route('/videostream', methods=["POST"])
 def videostream():
     return render_template('videostream.html')
