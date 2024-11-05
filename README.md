@@ -35,6 +35,7 @@ If this fails, you can try:
 python3 -m venv .venv
 ```
 Now activate your virtual environment:
+
 Windows:
 ```
 .venv\Scripts\activate
