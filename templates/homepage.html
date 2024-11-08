@@ -18,7 +18,13 @@
     <div class="row pt-1 pl-4 pr-4 mx-auto" style="width: 500px">
       <div class="col">
         <form action="/videostream" method="post" target="_self">
-          <button type="submit" class="btn btn-success btn-block">Start</button>
+          <button
+            type="submit"
+            class="btn btn-success btn-block"
+            id="start-media-capture"
+          >
+            Start
+          </button>
         </form>
       </div>
       <div class="col">
@@ -46,5 +52,6 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script src="{{url_for('static', filename='videocapture.js')}}"></script>
   </body>
 </html>

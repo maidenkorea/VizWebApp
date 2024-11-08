@@ -10,8 +10,8 @@ class Segmentation:
         self.classes = list(self.model.names.values())
 
 
-    def segmentation(self):
-        self.cap = cv2.VideoCapture(0)
+    def segmentation(self, feed):
+        self.cap = cv2.VideoCapture(feed)
         self.cap.set(3, 640)
         self.cap.set(4, 480)
 
