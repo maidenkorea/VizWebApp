@@ -5,7 +5,7 @@ from segmentation import Segmentation
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-do = Segmentation('yolov8m-seg.pt')
+model = Segmentation('yolov8m-seg.pt')
 source = 0 # source for video feed. 
 
 
@@ -15,16 +15,25 @@ def home():
 
 @app.route('/feed', methods=["POST", "GET"])
 def feed():
-    return Response(do.segmentation(source), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(model.segmentation(source), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/stop', methods=["POST"])
 def stop():
-    do.end()
+    model.end()
     return redirect(url_for('home'))
 
-@app.route('/videostream', methods=["POST"])
-def videostream():
-    return render_template('videostream.html')
+@app.route('/session', methods=["POST"])
+def session():
+    return render_template('session.html')
+
+
+@socketio.on('connect')
+def connect():
+    print('connected')
+
+@socketio.on('disconnect')
+def disconnect():
+    print('disconnected')
 
 
 if __name__ == '__main__':
