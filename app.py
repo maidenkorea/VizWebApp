@@ -26,14 +26,28 @@ def stop():
 def session():
     return render_template('session.html')
 
+@app.route('/test', methods=["POST", "GET"])
+def test():
+    return render_template('test.html')
+
 
 @socketio.on('connect')
 def connect():
     print('connected')
+    socketio.emit('request_stream')
 
 @socketio.on('disconnect')
 def disconnect():
     print('disconnected')
+
+@socketio.on('stream')
+def stream():
+    pass
+
+@socketio.on_error_default
+def default_error_handler(e):
+    print("Error: {}".format(e))
+    socketio.stop()
 
 
 if __name__ == '__main__':
