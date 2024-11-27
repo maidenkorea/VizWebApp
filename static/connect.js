@@ -1,7 +1,10 @@
 console.log("attempting socket connection to server...");
 
-var socketio = io();
-var video = document.querySelector("#videoElement");
+const socket = io();
+const video = document.querySelector("#videoElement");
+const canvas = document.createElement("canvas");
+const ctx = canvas.getContext("2d");
+
 const constraints = {
   audio: false,
   video: {
@@ -12,7 +15,7 @@ const constraints = {
   },
 };
 
-socketio.on("connect", () => {
+socket.on("connect", () => {
   console.log("connected!");
 
   if (navigator.mediaDevices.getUserMedia) {
@@ -20,6 +23,11 @@ socketio.on("connect", () => {
       .getUserMedia(constraints)
       .then(function (stream) {
         video.srcObject = stream;
+        setInterval(function () {
+          ctx.drawImage(video, 0, 0, 640, 480);
+          const frame = canvas.toDataURL("image/jpeg", 0.4);
+          socket.emit("frame", frame);
+        }, 150); // emit frames at 15 fps.
       })
       .catch(function (e) {
         console.log("error capturing video.");
@@ -29,6 +37,6 @@ socketio.on("connect", () => {
   }
 });
 
-socketio.on("disconnect", () => {
+socket.on("disconnect", () => {
   console.log("disconnected!");
 });

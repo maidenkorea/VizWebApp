@@ -1,12 +1,14 @@
 from flask import Flask, render_template, Response, redirect, url_for
 from flask_socketio import SocketIO
 from segmentation import Segmentation
+import test as t
 
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 model = Segmentation('yolov8m-seg.pt')
 source = 0 # source for video feed. 
+user_connected = False
 
 
 @app.route('/')
@@ -28,21 +30,23 @@ def session():
 
 @app.route('/test', methods=["POST", "GET"])
 def test():
+    #t.display_incoming_video()
     return render_template('test.html')
 
 
 @socketio.on('connect')
 def connect():
+    if user_connected:
+        pass
     print('connected')
-    socketio.emit('request_stream')
 
 @socketio.on('disconnect')
 def disconnect():
     print('disconnected')
 
-@socketio.on('stream')
-def stream():
-    pass
+@socketio.on('frame')
+def frame(data):
+    model.parse(data)
 
 @socketio.on_error_default
 def default_error_handler(e):
