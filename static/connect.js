@@ -1,7 +1,7 @@
 console.log("attempting socket connection to server...");
 
 const socket = io();
-const video = document.querySelector("#videoElement");
+const video = document.createElement("video");
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -25,12 +25,12 @@ socket.on("connect", () => {
         video.srcObject = stream;
         setInterval(function () {
           ctx.drawImage(video, 0, 0, 640, 480);
-          const frame = canvas.toDataURL("image/jpeg", 0.4);
+          const frame = canvas.toDataURL("image/jpeg", 1);
           socket.emit("frame", frame);
-        }, 150); // emit frames at 15 fps.
+        }, 300);
       })
       .catch(function (e) {
-        console.log("error capturing video.");
+        console.log("error capturing video: ", e);
       });
   } else {
     console.log("error detecting camera.");

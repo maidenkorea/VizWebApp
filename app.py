@@ -17,7 +17,7 @@ def home():
 
 @app.route('/feed', methods=["POST", "GET"])
 def feed():
-    return Response(model.segmentation(source), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(model.parse(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/stop', methods=["POST"])
 def stop():
@@ -46,7 +46,8 @@ def disconnect():
 
 @socketio.on('frame')
 def frame(data):
-    model.parse(data)
+    print('frame rec.')
+    model.update(data)
 
 @socketio.on_error_default
 def default_error_handler(e):
