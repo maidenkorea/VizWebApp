@@ -40,7 +40,6 @@ def disconnect():
 @socketio.on('frame')
 def frame(data):
     print('frame recieved.')
-    model.parse(data)
     feed(model.parse(data))
 
 @socketio.on_error_default
