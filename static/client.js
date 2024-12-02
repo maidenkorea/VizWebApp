@@ -1,6 +1,7 @@
 console.log("attempting socket connection to server...");
 
 const socket = io();
+
 const video = document.createElement("video");
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
@@ -38,4 +39,10 @@ socket.on("connect", () => {
 
 socket.on("disconnect", () => {
   console.log("disconnected!");
+});
+
+socket.on("result", (data) => {
+  const blob = new Blob([data]);
+  const url = URL.createObjectURL(blob);
+  document.getElementById("img").src = url;
 });

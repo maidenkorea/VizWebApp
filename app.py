@@ -6,20 +6,14 @@ from segmentation import Segmentation
 app = Flask(__name__)
 socketio = SocketIO(app)
 model = Segmentation('best.pt')
-user_connected = False
 
 
 @app.route('/')
 def home():
     return render_template('homepage.html')
 
-@app.route('/feed', methods=["POST", "GET"])
-def feed(data=None):
-    return Response(data, mimetype='multipart/x-mixed-replace; boundary=frame')
-
 @app.route('/stop', methods=["POST"])
 def stop():
-    model.end()
     return redirect(url_for('home'))
 
 @app.route('/session', methods=["POST"])
@@ -29,8 +23,6 @@ def session():
 
 @socketio.on('connect')
 def connect():
-    if user_connected:
-        pass
     print('connected')
 
 @socketio.on('disconnect')
@@ -40,7 +32,8 @@ def disconnect():
 @socketio.on('frame')
 def frame(data):
     print('frame recieved.')
-    feed(model.parse(data))
+    result = model.parse(data)
+    socketio.emit('result', result)
 
 @socketio.on_error_default
 def default_error_handler(e):

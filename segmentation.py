@@ -3,7 +3,6 @@ import numpy as np
 import base64
 import cv2
 
-cv2.VideoCapture()
 
 class Segmentation:
     def __init__(self, model):
@@ -21,7 +20,6 @@ class Segmentation:
         frame = self.readb64(data)
 
         try:
-            #_, frame = self.curr.read()
             print('processing frame...')
             results = self.model(frame, stream=True, verbose=False)
 
@@ -35,21 +33,12 @@ class Segmentation:
                     cv2.putText(frame, self.classes[cls], org, self.font, self.fontScale, self.color, self.thickness)
 
             _, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
+            frame = base64.b64encode(buffer)
 
-            return (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            return frame
                   
         except:
             print('error processing frame.')
-
-
-    def end(self):
-        try:
-            self.cap.release()
-        except:
-            print('no cap to close.')
-        self.isActive = False
 
     
     def readb64(self, uri):
