@@ -1,13 +1,11 @@
 from flask import Flask, render_template, Response, redirect, url_for
 from flask_socketio import SocketIO
 from segmentation import Segmentation
-import test as t
 
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-model = Segmentation('yolov8m-seg.pt')
-source = 0 # source for video feed. 
+model = Segmentation('best.pt')
 user_connected = False
 
 
@@ -16,8 +14,8 @@ def home():
     return render_template('homepage.html')
 
 @app.route('/feed', methods=["POST", "GET"])
-def feed():
-    return Response(model.parse(), mimetype='multipart/x-mixed-replace; boundary=frame')
+def feed(data=None):
+    return Response(data, mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/stop', methods=["POST"])
 def stop():
@@ -27,11 +25,6 @@ def stop():
 @app.route('/session', methods=["POST"])
 def session():
     return render_template('session.html')
-
-@app.route('/test', methods=["POST", "GET"])
-def test():
-    #t.display_incoming_video()
-    return render_template('test.html')
 
 
 @socketio.on('connect')
@@ -46,8 +39,9 @@ def disconnect():
 
 @socketio.on('frame')
 def frame(data):
-    print('frame rec.')
-    model.update(data)
+    print('frame recieved.')
+    model.parse(data)
+    feed(model.parse(data))
 
 @socketio.on_error_default
 def default_error_handler(e):

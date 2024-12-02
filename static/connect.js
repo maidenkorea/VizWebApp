@@ -17,7 +17,6 @@ const constraints = {
 
 socket.on("connect", () => {
   console.log("connected!");
-
   if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia(constraints)
