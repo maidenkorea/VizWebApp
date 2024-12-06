@@ -2,8 +2,8 @@ console.log("attempting socket connection to server...");
 
 const socket = io();
 
-const video = document.createElement("video");
-const canvas = document.createElement("canvas");
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const constraints = {
@@ -27,7 +27,7 @@ socket.on("connect", () => {
           ctx.drawImage(video, 0, 0, 640, 480);
           const frame = canvas.toDataURL("image/jpeg", 1);
           socket.emit("frame", frame);
-        }, 300);
+        }, 3000);
       })
       .catch(function (e) {
         console.log("error capturing video: ", e);
@@ -41,8 +41,8 @@ socket.on("disconnect", () => {
   console.log("disconnected!");
 });
 
-socket.on("result", (data) => {
-  const blob = new Blob([data]);
-  const url = URL.createObjectURL(blob);
-  document.getElementById("img").src = url;
+socket.on("result", () => {
+  var container = document.getElementById("img");
+  var content = container.innerHTML;
+  container.innerHTML = content;
 });

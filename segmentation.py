@@ -18,7 +18,7 @@ class Segmentation:
     def parse(self, data):
         print('calling parse...')
         frame = self.readb64(data)
-
+        
         try:
             print('processing frame...')
             results = self.model(frame, stream=True, verbose=False)
@@ -33,9 +33,10 @@ class Segmentation:
                     cv2.putText(frame, self.classes[cls], org, self.font, self.fontScale, self.color, self.thickness)
 
             _, buffer = cv2.imencode('.jpg', frame)
-            frame = base64.b64encode(buffer)
+            frame = buffer.tobytes()
 
-            return frame
+            return (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
                   
         except:
             print('error processing frame.')
@@ -43,6 +44,6 @@ class Segmentation:
     
     def readb64(self, uri):
         encoded_data = uri.split(',')[1]
-        nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
+        nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         return img

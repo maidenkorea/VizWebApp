@@ -1,6 +1,13 @@
 {% extends 'homepage.html' %} {% block content %}
 <div class="text-center">
-  <img id="img" class="rounded img-fluid" alt="Responsive image" />
+  <img
+    id="img"
+    src="{{ url_for('test') }}"
+    class="rounded img-fluid"
+    alt="Responsive image"
+  />
+  <canvas id="canvas" width="640" height="480"> </canvas>
+  <video autoplay="true" id="video"></video>
 </div>
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
